@@ -1,0 +1,83 @@
+<?php
+$this->title = "My Albums";
+$this->headTitle($this->title);
+?>
+<p><a id= "add" role= "button" data-toggle= "modal" data-target= "#insertForm">Add new album</a></p>
+<table class= "albums">
+<tr>
+ <th>Title</th>
+ <th>Artist</th>
+ <th>&nbsp;</th>
+</tr>
+<?php foreach($this->albums as $album) : ?>
+<tr id= "<?php echo $album->id ?>">
+ <td class= "title"><?php echo $this->escape($album->title);?></td>
+ <td class= "artist"><?php echo $this->escape($album->artist);?></td>
+ <td>
+ <a id= "edit">Edit</a>
+ <a href="<?php echo $this->url(array('controller'=>'index',
+ 'action'=>'delete', 'id'=>$album->id));?>">Delete</a>
+ </td>
+</tr>
+<?php endforeach; ?>
+</table>
+<br/>
+
+<div class= "modal fade" id= "insertForm" role= "dialog">
+  <div class= "modal-dialog">
+    <div class= "modal-content">
+      <div class= "modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h1 class= "modal-title" id= "myModalLable">Add Album</h1>
+      </div>
+      <div class="modal-body">
+
+  
+  <form action = "<?php echo $this->url(array('action' => 'add')); ?>" name= "insert" method= "post" role="form">
+  <fieldset>
+  <div class= "form-group">
+    <label>Title</label>
+    <input class= "form-control" type= "text" name= "title" required/>
+  </div>
+
+  <div class= "form-group">
+    <label>Artist</label>
+    <input class= "form-control" type= "text" name= "artist" required/>
+  </div>
+
+  </fieldset>
+</form>
+      </div>
+      <div class= "modal-footer">
+        <button type="button" class="btn btn-default"data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id= "submitbutton">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id= "editForm" class= "hidden">
+  <h1>Edit Album</h1>
+  <form  action = "<?php echo $this->url(array('action' => 'save')); ?>" name= "edit" method= "post">
+  <fieldset>
+  <div class= "form-group">
+    <label>Title</label>
+    <input class= "form-control" type= "text" name= "title" required/>
+  </div>
+
+  <div class= "form-group">
+    <label>Artist</label>
+    <input class= "form-control" type= "text" name= "artist" required/>
+  </div>
+    <input type= "hidden" name= "id"/>
+    <input type= "submit" id= "submitbuttonEdit" value= "Save"/>
+  </fieldset>
+</form>
+</div>
+ <?php echo $this->headScript()->prependFile( $this->baseUrl("/js/validate/dist/jquery.validate.min.js")); ?>
+ <?php echo $this->headScript()->prependFile( $this->baseUrl("/js/jquery.form.min.js")); ?>
+ <?php echo $this->headScript()->prependFile( $this->baseUrl("/js/site.js")); ?>
