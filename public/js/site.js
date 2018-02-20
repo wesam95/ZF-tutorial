@@ -2,29 +2,20 @@
   	$('body').on('click','#add',function(){
   		$("form[name=insert]").validate();
     });
-      $("#submitbutton").click(function(){
-      $("form[name=insert]").submit();
-    });
-      $("form[name=insert]").on('submit',function(){
-        $.ajax({url:"/index/add",
-                dataType:'json',
-                success:function(data){
-                  console.log(data);
-          $(".albums").append('<tr id="'+data['id']+'">'
-          +'<td class= "title">'+data['title']+'</td>'
-          +'<td class= "artist">'+data['artist']+'</td>'
-          +'<td><a id= "edit">Edit</a> <a id= "delete">delete</a></td></tr>');
-          $("#insertForm").hide();
-          $("form[name=insert]").clearForm();
-          }
+
+      $("#submitbuttonAdd").click(function(){
+        $("form[name=insert]").submit();
       });
-    });  
+      $("form[name=insert]").ajaxForm(function(data){
+          $(".albums").append(data);
+          $("form[name=insert]").clearForm();
+          });
+      
+      
   
 
     $('body').on('click','#edit',function(){
       var id = $(this).parent().parent().attr('id');
-  		$("#editForm").removeClass("hidden");
-  		$("#insertForm").addClass("hidden");
       $.ajax({url: "/index/edit/?id="+id+"",
         dataType: "json",
         success:function(data){
@@ -35,10 +26,32 @@
         });
       });
   	  $("form[name=edit]").validate();
+
+      $("#submitbuttonEdit").click(function(){
+      $("form[name=edit]").submit();
+    });
       $("form[name=edit]").ajaxForm(function(data){
       var row= $(".albums").find("#"+data['id']+"");
       row.find(".title").text(data['title']);
       row.find(".artist").text(data['artist']);
-      $("#editForm").addClass("hidden");
+      });
+
+      $('body').on('click','#delete',function(){
+        var id = $(this).parent().parent().attr('id');
+        $.ajax({url:"/index/delete/?id="+id+"",
+          dataType: "json",
+          success:function(data){
+            $("p[id=warning]").text("Are you sure that you want to delete '"+data['title']+"' by '"+data['artist']+"'");
+            $("input[type=hidden][name=id]").val(data['id']);
+          }
+        });
+      });
+
+      $("#submitbuttonDelete").click(function(){
+        $("form[name=delete]").submit();
+      });
+      $("form[name=delete]").ajaxForm(function(data){
+      var row= $(".albums").find("#"+data['id']+"");
+      $(row).remove();        
       });
   });

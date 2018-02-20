@@ -17,14 +17,17 @@ class IndexController extends Zend_Controller_Action
     public function addAction()
     {
   
-        $artist = $this->_getParam('artist');
-        $title = $this->_getParam('title');
+        $artist = $this->getRequest()->getPost('artist');
+        $title = $this->getRequest()->getPost('title');
         $albums = new Application_Model_DbTable_Albums();
         $albums->addAlbum($artist, $title);
         $id = $albums->getAdapter()->lastInsertId();
         $result = $albums->getAlbum($id);
-        $this->_helper->redirector('index');
-        $this->_helper->json($result);
+        $data = '<tr id="'.$result['id'].'">'
+          .'<td class= "title">'.$result['title'].'</td>'
+          .'<td class= "artist">'.$result['artist'].'</td>'
+          .'<td><a id= "edit">Edit</a> <a id= "delete">Delete</a></td></tr>' ;
+        $this->_helper->json($data);
 
         
     }
@@ -54,19 +57,20 @@ class IndexController extends Zend_Controller_Action
 
     public function deleteAction()
     {
-        if ($this->getRequest()->isPost()) {
-        $del = $this->getRequest()->getPost('del');
-        if ($del == 'Yes') {
-        $id = $this->getRequest()->getPost('id');
+        $id = $this->_getParam('id');
         $albums = new Application_Model_DbTable_Albums();
-        $albums->deleteAlbum($id);
-        }
-        $this->_helper->redirector('index');
-        } else {
-        $id = $this->_getParam('id', 0);
+        $result = $albums->getAlbum($id);
+        $this->_helper->json($result);      
+    }
+
+    public function removeAction()
+    {
+        $id= $this->_getParam('id');
         $albums = new Application_Model_DbTable_Albums();
-        $this->view->album = $albums->getAlbum($id);
-        } 
+        $result= $albums->getAlbum($id);
+        $result2= $albums->deleteAlbum($id);
+        $this->_helper->json($result);        
+
     }
 }
 

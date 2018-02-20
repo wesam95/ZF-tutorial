@@ -9,20 +9,19 @@ $this->headTitle($this->title);
  <th>Artist</th>
  <th>&nbsp;</th>
 </tr>
-<?php foreach($this->albums as $album) : ?>
-<tr id= "<?php echo $album->id ?>">
- <td class= "title"><?php echo $this->escape($album->title);?></td>
- <td class= "artist"><?php echo $this->escape($album->artist);?></td>
- <td>
- <a id= "edit">Edit</a>
- <a href="<?php echo $this->url(array('controller'=>'index',
- 'action'=>'delete', 'id'=>$album->id));?>">Delete</a>
- </td>
-</tr>
-<?php endforeach; ?>
-</table>
-<br/>
 
+<?php foreach($this->albums as $album) : ?>
+  <tr id= "<?php echo $album->id ?>">
+    <td class= "title"><?php echo $this->escape($album->title);?></td>
+    <td class= "artist"><?php echo $this->escape($album->artist);?></td>
+    <td>
+      <a id= "edit" role= "button" data-toggle= "modal" data-target= "#updateForm">Edit</a>
+      <a id = "delete" role= "button" data-toggle= "modal" data-target= "#deleteForm">Delete</a>
+    </td>
+  </tr>
+  <?php endforeach; ?>
+  </table>
+<br/>
 <div class= "modal fade" id= "insertForm" role= "dialog">
   <div class= "modal-dialog">
     <div class= "modal-content">
@@ -31,53 +30,88 @@ $this->headTitle($this->title);
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
-        <h1 class= "modal-title" id= "myModalLable">Add Album</h1>
+          <h1 class= "modal-title" id= "myModalLable">Add Album</h1>
       </div>
       <div class="modal-body">
-
-  
-  <form action = "<?php echo $this->url(array('action' => 'add')); ?>" name= "insert" method= "post" role="form">
-  <fieldset>
-  <div class= "form-group">
-    <label>Title</label>
-    <input class= "form-control" type= "text" name= "title" required/>
-  </div>
-
-  <div class= "form-group">
-    <label>Artist</label>
-    <input class= "form-control" type= "text" name= "artist" required/>
-  </div>
-
-  </fieldset>
-</form>
+        <form action = "<?php echo $this->url(array('action' => 'add')); ?>" name= "insert" method= "post" role="form">
+          <fieldset>
+            <div class= "form-group">
+              <label>Title</label>
+              <input class= "form-control" type= "text" name= "title" required/>
+            </div>
+            <div class= "form-group">
+              <label>Artist</label>
+              <input class= "form-control" type= "text" name= "artist" required/>
+            </div>
+          </fieldset>
+        </form>
       </div>
       <div class= "modal-footer">
         <button type="button" class="btn btn-default"data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id= "submitbutton">Save changes</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"id= "submitbuttonAdd">Add</button>
       </div>
     </div>
   </div>
 </div>
 
 
-<div id= "editForm" class= "hidden">
-  <h1>Edit Album</h1>
-  <form  action = "<?php echo $this->url(array('action' => 'save')); ?>" name= "edit" method= "post">
-  <fieldset>
-  <div class= "form-group">
-    <label>Title</label>
-    <input class= "form-control" type= "text" name= "title" required/>
+<div class= "modal fade" id= "updateForm" role= "dialog">
+  <div class= "modal-dialog">
+    <div class= "modal-content">
+      <div class= "modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h1 class= "modal-title" id= "myModalLable">Edit Album</h1>
+      </div>
+      <div class="modal-body">
+        <form  action = "<?php echo $this->url(array('action' => 'save')); ?>" name= "edit" method= "post">
+          <fieldset>
+            <div class= "form-group">
+              <label>Title</label>
+              <input class= "form-control" type= "text" name= "title" required/>
+            </div>
+            <div class= "form-group">
+              <label>Artist</label>
+              <input class= "form-control" type= "text" name= "artist" required/>
+            </div>
+              <input type= "hidden" name= "id"/>
+          </fieldset>
+        </form>
+      </div>
+      <div class= "modal-footer">
+        <button type="button" class="btn btn-default"data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"id= "submitbuttonEdit">Save changes</button>
+      </div>
+    </div>
   </div>
-
-  <div class= "form-group">
-    <label>Artist</label>
-    <input class= "form-control" type= "text" name= "artist" required/>
-  </div>
-    <input type= "hidden" name= "id"/>
-    <input type= "submit" id= "submitbuttonEdit" value= "Save"/>
-  </fieldset>
-</form>
 </div>
+
+
+<div class= "modal fade" id= "deleteForm" role= "dialog">
+  <div class= "modal-dialog">
+    <div class= "modal-content">
+      <div class= "modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h1 class= "modal-title" id= "myModalLable">Delete Album</h1>
+      </div>
+      <div class="modal-body">
+        <p id= "warning"></p>
+      </div>
+      <div class= "modal-footer">
+        <form action="<?php echo $this->url(array('action'=>'remove')); ?>" name="delete" method="post">
+          <input type="hidden" name="id"/>
+          <input id="submitbuttonDelete" type="submit"class="btn btn-primary" data-dismiss="modal" name="del" value="Yes" />
+          <input type="submit" class="btn btn-default" data-dismiss="modal" name="del" value="No" />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
  <?php echo $this->headScript()->prependFile( $this->baseUrl("/js/validate/dist/jquery.validate.min.js")); ?>
  <?php echo $this->headScript()->prependFile( $this->baseUrl("/js/jquery.form.min.js")); ?>
- <?php echo $this->headScript()->prependFile( $this->baseUrl("/js/site.js")); ?>
