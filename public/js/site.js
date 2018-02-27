@@ -19,9 +19,9 @@
       $.ajax({url: "/index/edit/?id="+id+"",
         dataType: "json",
         success:function(data){
-          $("input[name=title]").val(data['title']);
-          $("input[name=artist]").val(data['artist']);
-          $("input[name=id]").val(data['id']);
+          $("form[name=edit]").find("input[name=title]").val(data['title']);
+          $("form[name=edit]").find("input[name=artist]").val(data['artist']);
+          $("form[name=edit]").find("input[name=id]").val(data['id']);
           }
         });
       });
@@ -48,7 +48,7 @@
       });
 
       $("#submitbuttonDelete").click(function(){
-        $("form[name=delete]").submit();
+      $("form[name=delete]").submit();
       });
       $("form[name=delete]").ajaxForm(function(data){
       var row= $(".albums").find("#"+data['id']+"");

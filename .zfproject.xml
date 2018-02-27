@@ -26,6 +26,7 @@
       <modelsDirectory>
         <dbTableDirectory>
           <dbTableFile dbTableName="Albums"/>
+          <dbTableFile dbTableName="BookAuther"/>
         </dbTableDirectory>
       </modelsDirectory>
       <modulesDirectory enabled="false"/>

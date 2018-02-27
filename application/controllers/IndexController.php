@@ -26,7 +26,8 @@ class IndexController extends Zend_Controller_Action
         $data = '<tr id="'.$result['id'].'">'
           .'<td class= "title">'.$result['title'].'</td>'
           .'<td class= "artist">'.$result['artist'].'</td>'
-          .'<td><a id= "edit">Edit</a> <a id= "delete">Delete</a></td></tr>' ;
+          .'<td><a id= "edit" role= "button" data-toggle= "modal" data-target= "#updateForm">Edit</a>' 
+          .'<a id= "delete" role= "button" data-toggle= "modal" data-target= "#deleteForm">Delete</a></td></tr>' ;
         $this->_helper->json($data);
 
         
