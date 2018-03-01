@@ -1,12 +1,22 @@
   $(document).ready(function(){
-  	$('body').on('click','#add',function(){
+  	
   		$("form[name=insert]").validate();
-    });
+
+      $("span[aria-hidden=true]").click(function(){
+      $("label[class=error]").remove();
+      $("form").clearForm();
+      });
+
+      $(".btn-default").click(function(){
+      $("label[class=error]").remove();
+      $("form").clearForm();
+      });
 
       $("#submitbuttonAdd").click(function(){
         $("form[name=insert]").submit();
       });
       $("form[name=insert]").ajaxForm(function(data){
+          $("#insertForm").modal('hide');
           $(".albums").append(data);
           $("form[name=insert]").clearForm();
           });
@@ -31,6 +41,7 @@
       $("form[name=edit]").submit();
     });
       $("form[name=edit]").ajaxForm(function(data){
+      $("#insertForm").modal('hide');
       var row= $(".albums").find("#"+data['id']+"");
       row.find(".title").text(data['title']);
       row.find(".artist").text(data['artist']);
